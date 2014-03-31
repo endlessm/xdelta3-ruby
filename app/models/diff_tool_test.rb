@@ -5,10 +5,44 @@ require_relative 'diff_tool'
 OLD = "old_dir"
 NEW = "new_dir"
 PATCH = "patch_dir"
+STAGING_DIR = 'staging'
 
 # Test Suite for recursive XDELTA tool
 
 class DeltaTest < Test::Unit::TestCase
+
+    # Performs the delta operation
+    def perform_delta_zip(old_dir, new_dir, patch_dir)
+
+        old_dir_zip = old_dir + '.zip'
+        new_dir_zip = new_dir + '.zip'
+
+        zip_directory(old_dir, old_dir_zip)
+        zip_directory(new_dir, new_dir_zip)
+
+        result = dir_delta_zipped(old_dir_zip, new_dir_zip, 'patch')
+        assert(result, "Delta step failed")
+
+        old_dir_size = File.size(old_dir_zip)
+        new_dir_size = File.size(new_dir_zip)
+        patch_size = File.size('patch')
+
+        puts "SIZE OF PATCH IS " + patch_size.to_s
+        puts "SIZE OF OLD_DIR_ZIP IS " + old_dir_size.to_s
+        puts "SIZE OF NEW_DIR_ZIP IS " + new_dir_size.to_s
+        Dir.mkdir(STAGING_DIR)
+
+        patched_dir_zip = 'patched.zip'
+
+        result = dir_patch_zipped('patch', old_dir_zip, patched_dir_zip)
+        assert(result, "Patch step failed")
+        # Checks (recursively) if patched_dir and new_dir are the same.
+        unzip_directory(patched_dir_zip, location=STAGING_DIR)
+        result = system('diff', '-r', '-q', File.join(STAGING_DIR, new_dir), new_dir)
+        #FileUtils.rm_rf(STAGING_DIR)
+        assert(result, "Resulting directories are different")
+
+    end
 
     # Performs the delta operation
     def perform_delta(old_dir, new_dir, patch_dir)
@@ -95,6 +129,15 @@ class DeltaTest < Test::Unit::TestCase
         FileUtils.rm_rf(OLD)
         FileUtils.rm_rf(NEW)
         FileUtils.rm_rf(PATCH)
+
+        FileUtils.rm_rf(OLD + '.zip')
+        FileUtils.rm_rf(NEW + '.zip')
+        FileUtils.rm_rf(PATCH + '.zip')
+
+        FileUtils.rm_rf('patch')
+        FileUtils.rm_rf('patched.zip')
+
+        FileUtils.rm_rf(STAGING_DIR)
     end
 
     def test_empty

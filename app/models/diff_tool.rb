@@ -23,6 +23,57 @@ def safe_mkdir(dirname)
     end
 end
 
+def zip_directory(dirname, zipname)
+    command = ['zip', '-q', '-r', zipname, dirname]
+    system *command
+end
+
+# Unzips directory to specified location.
+# If no location is specified, will default to current directory
+def unzip_directory(zipname, location='.')
+    command = ['unzip', '-q', zipname, '-d', location]
+    system *command
+end
+
+# Computes patch for a zip file
+#
+# Parameters:
+# => old_dir_zip: name of old version of zip file
+# => new_dir_zip: name of new version of zip file
+# => patch_name: name of file to be created representing the patch from old to new.
+#
+#
+# Returns: True on success, False on failure
+def dir_delta_zipped(old_dir_zip, new_dir_zip, patch_name)
+    puts "Generating delta patch..."
+
+    command = ['xdelta3', '-S djw', '-e', '-9', '-q']
+    command += ['-s', old_dir_zip, new_dir_zip, patch_name]
+    puts command.join(' ')
+    system *command
+end
+
+
+# Applies patch to zip file
+#
+# Parameters:
+# => patch_name: name of patch representing the patch to be applied.
+# => old_dir_zip: name of old version of zip file to be patched.
+# => patched_dir_zip: name of new zip file to be created by applying patch_name to old_dir_zip
+#
+#    The patch_name will be applied to old_dir_zip, and the result will be placed in
+#    patched_dir_zip
+#
+# Returns: True on success, False on failure
+def dir_patch_zipped(patch_name, old_dir_zip, patched_dir_zip)
+    puts "Applying patch..."
+
+    command = ['xdelta3', '-d', '-q']
+    command += ['-s', old_dir_zip, patch_name, patched_dir_zip]
+    puts command.join(' ')
+    system *command
+end
+
 # Computes recursive patch for two directories
 #
 # Parameters:
