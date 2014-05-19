@@ -1,40 +1,3 @@
-### Helpers ###
-
-# Returns true if file exists AND file
-# is directory
-def directory_exists?(directory)
-    File.directory?(directory)
-end
-
-# Returns true if file exists
-def file_exists?(filename)
-    File.file?(filename)
-end
-
-# Makes a directory, and catches error
-# if operation failed. Useful in cases where directory
-# already exists when we try to create it
-def safe_mkdir(dirname)
-    begin
-        Dir.mkdir(dirname)
-    rescue SystemCallError
-        $stderr.print "Making directory failed! " + $!.to_s
-        return false
-    end
-end
-
-def zip_directory(dirname, zipname)
-    command = ['zip', '-q', '-r', zipname, dirname]
-    system *command
-end
-
-# Unzips directory to specified location.
-# If no location is specified, will default to current directory
-def unzip_directory(zipname, location='.')
-    command = ['unzip', '-q', zipname, '-d', location]
-    system *command
-end
-
 # Computes patch for a zip file
 #
 # Parameters:
@@ -52,7 +15,6 @@ def dir_delta_zipped(old_dir_zip, new_dir_zip, patch_name)
     puts command.join(' ')
     system *command
 end
-
 
 # Applies patch to zip file
 #
@@ -106,7 +68,6 @@ def dir_delta(old_dir, new_dir, patch_dir)
     deleted_files = old_files - new_files
 
     for filename in new_files
-
         old_file = File.join(old_dir, filename)
         new_file = File.join(new_dir, filename)
         patch_file = File.join(patch_dir, filename)
@@ -155,15 +116,12 @@ end
 def dir_patch(patch_dir, old_dir, new_dir)
     puts "Patching directory..."
 
-    if not safe_mkdir(new_dir)
-        return false
-    end
+    return false if not safe_mkdir(new_dir)
 
     # Get list of patch files (excluding '.' and '..')
     patch_files = Dir.entries(patch_dir) - ['.', '..']
 
     for filename in patch_files
-
         old_file = File.join(old_dir, filename)
         new_file = File.join(new_dir, filename)
         patch_file = File.join(patch_dir, filename)
@@ -174,7 +132,6 @@ def dir_patch(patch_dir, old_dir, new_dir)
             next
 
         elsif filename.end_with? '.xdelta'
-
             # Remove '.xdelta' from the file name of old_file
             # and new_file
             old_file = old_file.gsub(/.xdelta$/, '')
@@ -194,7 +151,5 @@ def dir_patch(patch_dir, old_dir, new_dir)
             # Execute command
             system *command
         end
-
     end
-
 end
