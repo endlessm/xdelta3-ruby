@@ -1,19 +1,25 @@
 module XDelta3
   module Utils
-    # TODO: Test me
-    # TODO: Ruby builtin?
-    def zip_directory(dirname, zipname)
-        command = ['zip', '-q', '-r', zipname, dirname]
-        system *command
+    # Compresses a directory into a tgz file. It does not trim out the
+    # common path prefix.
+    #
+    # XXX: We should be using built-ins vs system calls
+    def targz(dirname, filename)
+        command = ['tar', '-czf', filename, dirname]
+        exit_code = system *command
+
+        raise "Could not compress file" if exit_code != true
     end
 
-    # Unzips directory to specified location.
-    # If no location is specified, will default to current directory
-    # TODO: Test me
-    # TODO: Ruby builtin?
-    def unzip_directory(zipname, location='.')
-        command = ['unzip', '-q', zipname, '-d', location]
-        system *command
+    # Extracts a tgz file into a directory to specified location. This function
+    # does not automatically create the target directory.
+    #
+    # XXX: We should be using built-ins vs system calls
+    def untargz(filename, location)
+      command = ['tar', '-zxf', filename, '-C', location]
+      exit_code = system *command
+
+      raise "Could not decompress files" if exit_code != true
     end
   end
 end
