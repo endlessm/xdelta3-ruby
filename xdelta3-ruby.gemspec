@@ -1,7 +1,7 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'xdelta3/ruby/version'
+require 'xdelta3-ruby/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "xdelta3-ruby"
