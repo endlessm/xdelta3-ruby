@@ -1,15 +1,15 @@
 module XDeltaSpecHelpers
-  def shuffle(text)
+  def self.shuffle(text)
     text.split("").shuffle.join
   end
 
   # Generates a random string of uppercase, alphabetic characters
-  def random_string(size)
+  def self.random_string(size)
     shuffle((0...size).map { (65 + rand(26)).chr }.join)
   end
 
   # Generates a random, multi-line string
-  def random_multiline_string(size)
+  def self.random_multiline_string(size)
     num_breaks = size / 50
 
     text = random_string(size)
@@ -22,7 +22,7 @@ module XDeltaSpecHelpers
   end
 
   # Returns an array of random, unique strings
-  def random_string_array(array_size, string_size)
+  def self.random_string_array(array_size, string_size)
     text = []
     0..array_size.each do
         text << random_string(rand(1..string_size))
