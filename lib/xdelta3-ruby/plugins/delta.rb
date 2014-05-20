@@ -1,3 +1,8 @@
+module XDelta3
+  class Delta
+  end
+end
+return
 # Computes patch for a zip file
 #
 # Parameters:
