@@ -1,16 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'xdelta3-ruby/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "xdelta3-ruby"
-  spec.version       = Xdelta3::Ruby::VERSION
+  spec.version       = XDelta3::Version
   spec.authors       = ["Srdjan Grubor"]
   spec.email         = ["sgnn7@sgnn7.org"]
   spec.summary       = "XDelta3 wrapper for generating patches"
   spec.description   = ""
-  spec.homepage      = ""
+  spec.homepage      = "http://github.com/endlessm/xdelta3-ruby"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
