@@ -1,15 +1,15 @@
 module XDelta3
-  module Delta
+  module Patch
     # Computes delta for two files
     #
     # Parameters:
     # => old_file: Path to old version of file
     # => new_file: Path to new version of file
     # => output_file: Path to resulting delta output file
-    def self.create_from_file(old_file, new_file, output_file)
+    def self.create(old_file, new_file, output_file)
       XDelta3.logger.debug "Generating delta patch: [#{old_file}, #{new_file}, #{output_file}]"
 
-      Impl.create_delta old_file, new_file, output_file
+      Impl.create_patch old_file, new_file, output_file
     end
 
     # Applies patch to a file
@@ -18,8 +18,7 @@ module XDelta3
     # => old_file: Path to old version of file
     # => patch_file: Path to the delta patch file
     # => output_file: Path to resulting new version file
-    # TODO: test me
-    def self.patch_file(old_file, patch_file, output_file)
+    def self.apply(old_file, patch_file, output_file)
       XDelta3.logger.debug "Applying patch: [#{old_file}, #{patch_file}, #{output_file}]"
 
       Impl.apply_patch old_file, patch_file, output_file

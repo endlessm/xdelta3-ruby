@@ -8,7 +8,7 @@ module XDelta3
   # Current version only supports CLI as its implementation
   autoload :Impl, 'xdelta3-ruby/implementations/impl_cli.rb'
 
-  autoload :Delta, 'xdelta3-ruby/plugins/delta.rb'
+  autoload :Patch, 'xdelta3-ruby/plugins/patch.rb'
 
   # Auxilary methods
   autoload :Utils, 'xdelta3-ruby/utils.rb'
