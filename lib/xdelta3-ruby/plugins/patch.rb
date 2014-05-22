@@ -53,15 +53,13 @@ module XDelta3
           next
         end
 
-        if old_files.include? filename
-          @@log.debug "Modified file: ", new_file
-        else
-          @@log.debug "New file: ", new_file
+        @@log.debug "Patch for: ", new_file
+        if File.directory? old_dir and Dir.entries(old_dir).include? filename
+          @@log.debug " -> Modified from ", old_file
+          source_file = old_file
         end
 
         patch_file += ".xdelta"
-
-        command << [ '-s', old_file ] if old_files.include? filename
       end
     end
 
@@ -97,7 +95,7 @@ module XDelta3
           old_file = old_file.gsub(/.xdelta$/, '')
           new_file = new_file.gsub(/.xdelta$/, '')
 
-          command << [ '-s', old_file ] if old_files.include? filename
+          source_file = old_file if File.file? old_file
         end
       end
     end
