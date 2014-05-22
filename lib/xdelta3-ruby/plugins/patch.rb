@@ -33,8 +33,8 @@ module XDelta3
     # => old_dir: path to old version of directory
     # => new_dir: path to new version of directory
     # => patch_dir: path to target output directory
-    def create_from_dir(old_dir, new_dir, patch_dir)
-      @@log.debug "Generating delta patch..."
+    def self.create_from_dir(old_dir, new_dir, patch_dir)
+      @@log.debug "Generating delta patch: [#{old_dir}, #{new_dir}, #{patch_dir}]"
 
       Dir.mkdir patch_dir unless File.directory? patch_dir
 
@@ -43,23 +43,25 @@ module XDelta3
       new_files = Dir.entries(new_dir) - ['.', '..']
 
       new_files.each do | filename |
+        @@log.debug "Processing \"#{filename}\""
         old_file = File.join(old_dir, filename)
         new_file = File.join(new_dir, filename)
         patch_file = File.join(patch_dir, filename)
 
         # If it is a directory, recurse the delta function on it
         if File.directory?(new_file)
-          dir_delta(old_file, new_file, patch_file)
+          @@log.debug " -> Is a directory. Recursing..."
+          create_from_dir(old_file, new_file, patch_file)
           next
         end
 
-        @@log.debug "Patch for: ", new_file
+        @@log.debug "Creating patch for: #{new_file}"
         if File.directory? old_dir and Dir.entries(old_dir).include? filename
-          @@log.debug " -> Modified from ", old_file
+          @@log.debug " -> Modified from #{old_file}"
           source_file = old_file
         end
 
-        patch_file += ".xdelta"
+        create old_file, new_file, "#{patch_file}.xdelta"
       end
     end
 
@@ -70,7 +72,7 @@ module XDelta3
     # => old_dir: path to old version of directory
     # => patch_dir: path to new version of directory
     # => new_dir: path to target output directory
-    def apply_to_dir(old_dir, patch_dir, new_dir)
+    def self.apply_to_dir(old_dir, patch_dir, new_dir)
       @@log.debug "Patching directory..."
 
       Dir.mkdir patch_dir unless File.directory? patch_dir

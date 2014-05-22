@@ -1,26 +1,50 @@
+require 'open3'
+
 module XDelta3
   module Impl
-    # TODO: Add application name header to deltas
-    @@base_command = ['xdelta3', '-S djw', '-q', '-f']
+    @@log = XDelta3.logger 
+
+    @@base_command = ['xdelta3', '-f'] # TODO: Add application header
 
     def self.create_patch(old_file, new_file, output_file)
-      command = @@base_command + ['-e', '-9', '-s', old_file, new_file, output_file]
-      XDelta3.logger.debug command.join(' ')
+      command = @@base_command
+      command += ['-e']
+      command += ['-s', old_file] if File.file? old_file #TODO Test me
+      command += [new_file, output_file]
 
-      is_success = system *command
-      XDelta3.logger.info "Success: #{is_success == true}"
+      is_success = system_exec *command
 
       raise "Could not create delta with command \"#{command.join(' ')}\"" unless is_success
     end
 
     def self.apply_patch(old_file, patch_file, output_file)
-      command = @@base_command + ['-d', '-s', old_file, patch_file, output_file]
-      XDelta3.logger.debug command.join(' ')
+      command = @@base_command
+      command += ['-d', '-s', old_file, patch_file, output_file]
 
-      is_success = system *command
-      XDelta3.logger.info "Success: #{is_success == true}"
+      is_success = system_exec *command
 
       raise "Could not create delta with command \"#{command.join(' ')}\"" unless is_success
+    end
+
+    private
+
+    # TODO Figure out why Open3 is not working
+    def self.system_exec *args
+      @@log.debug "[ #{args.join(', ')} ]"
+
+      status = system *args
+      #stdout,stderr,status = Open3.capture3(*args)
+
+      if status == true
+        @@log.info "Success"
+        return true
+      end
+
+      @@log.error "Failed"
+      # @@log.error stdout
+      # @@log.error stderr
+
+      return false
     end
   end
 end
