@@ -1,5 +1,6 @@
 module XDelta3
   module Impl
+    # TODO: Add application name header to deltas
     @@base_command = ['xdelta3', '-S djw', '-q', '-f']
 
     def self.create_patch(old_file, new_file, output_file)
