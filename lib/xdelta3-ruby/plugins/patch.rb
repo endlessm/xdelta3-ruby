@@ -25,7 +25,6 @@ module XDelta3
       Impl.apply_patch old_file, patch_file, output_file
     end
 
-    # TODO: test me
     # Computes recursive patch for two directories and creates a directory
     # of resultant patches
     #
@@ -51,7 +50,7 @@ module XDelta3
         # If it is a directory, recurse the delta function on it
         if File.directory?(new_file)
           @@log.debug " -> Is a directory. Recursing..."
-          create_from_dir(old_file, new_file, patch_file)
+          self.create_from_dir(old_file, new_file, patch_file)
           next
         end
 
@@ -61,11 +60,10 @@ module XDelta3
           source_file = old_file
         end
 
-        create old_file, new_file, "#{patch_file}.xdelta"
+        self.create old_file, new_file, "#{patch_file}.xdelta"
       end
     end
 
-    # TODO: test me
     # Applies a folder of patches to another directory
     #
     # Parameters:
@@ -73,9 +71,9 @@ module XDelta3
     # => patch_dir: path to new version of directory
     # => new_dir: path to target output directory
     def self.apply_to_dir(old_dir, patch_dir, new_dir)
-      @@log.debug "Patching directory..."
+      @@log.debug "Patching dir: [#{old_dir}, #{patch_dir}, #{new_dir}]"
 
-      Dir.mkdir patch_dir unless File.directory? patch_dir
+      Dir.mkdir new_dir unless File.directory? new_dir
 
       # Get list of patch files (excluding '.' and '..')
       patch_files = Dir.entries(patch_dir) - ['.', '..']
@@ -87,18 +85,16 @@ module XDelta3
 
         # If patch file is a directory, recurse on it
         if File.directory?(patch_file)
-          dir_patch(patch_file, old_file, new_file)
+          self.apply_to_dir(old_file, patch_file, new_file)
           next
         end
 
-        if filename.end_with? '.xdelta'
-          # Remove '.xdelta' from the file name of old_file
-          # and new_file
-          old_file = old_file.gsub(/.xdelta$/, '')
-          new_file = new_file.gsub(/.xdelta$/, '')
+        raise "unknown file found in patch \"#{filename}\"" unless filename.end_with? '.xdelta'
 
-          source_file = old_file if File.file? old_file
-        end
+        old_file = old_file.gsub(/.xdelta$/, '')
+        new_file = new_file.gsub(/.xdelta$/, '')
+
+        self.apply old_file, patch_file, new_file
       end
     end
   end

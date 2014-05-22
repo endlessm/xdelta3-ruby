@@ -19,7 +19,9 @@ module XDelta3
 
     def self.apply_patch(old_file, patch_file, output_file)
       command = @@base_command
-      command += ['-d', '-s', old_file, patch_file, output_file]
+      command += ['-d']
+      command += ['-s', old_file] if File.file? old_file #TODO Test me
+      command += [patch_file, output_file]
 
       is_success = system_exec *command
 
