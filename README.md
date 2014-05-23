@@ -1,6 +1,7 @@
 # Xdelta3::Ruby
 
-Gem that eases creation of xdelta diffs of directories
+Gem that eases creation of xdelta diffs. Currently this is
+just a wrapper over the system's xdelta3 CLI interface.
 
 ## Installation
 
@@ -16,12 +17,16 @@ Or install it yourself as:
 
     $ gem install xdelta3-ruby
 
-Ensure that xdelta3 is on your path. Current implementation
-is only tested on Linux (Debian-based).
+Ensure that xdelta3 (and optionally tar) is on your path. Current
+implementation is only tested on Linux (Debian-based).
 
 ## Usage
 
-TODO: Write usage instructions here
+    XDelta::Patch.create(old_file, new_file, patch_file)
+    XDelta::Patch.apply(old_file, patch_file, new_file)
+
+    XDelta::Patch.create_from_dir(old_dir, new_dir, patch_file)
+    XDelta::Patch.apply_to_dir(old_dir, patch_file, new_dir)
 
 ## Contributing
 
