@@ -29,9 +29,9 @@ module XDelta3
     # of resultant patches
     #
     # Parameters:
-    # => old_dir: path to old version of directory
-    # => new_dir: path to new version of directory
-    # => patch_file: path to target output directory
+    # => old_dir: Path to old version of directory
+    # => new_dir: Path to new version of directory
+    # => patch_file: Path to target output directory
     def self.create_from_dir(old_dir, new_dir, patch_file)
       temp_dir = Dir.mktmpdir(self.name)
       self.create_from_dir_to_dir old_dir, new_dir, temp_dir
@@ -44,9 +44,9 @@ module XDelta3
     # Applies a patch to a directory
     #
     # Parameters:
-    # => old_dir: path to old version of directory
-    # => patch_file: path to new version of directory
-    # => new_dir: path to target output directory
+    # => old_dir: Path to old version of directory
+    # => patch_file: Path to new version of directory
+    # => new_dir: Path to target output directory
     def self.apply_to_dir(old_dir, patch_file, new_dir)
       raise "Could not open #{patch_file}" unless File.file? patch_file
 

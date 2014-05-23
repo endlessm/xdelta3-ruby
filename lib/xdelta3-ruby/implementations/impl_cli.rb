@@ -9,7 +9,7 @@ module XDelta3
     def self.create_patch(old_file, new_file, output_file)
       command = @@base_command
       command += ['-e']
-      command += ['-s', old_file] if File.file? old_file #TODO Test me
+      command += ['-s', old_file] if File.file? old_file
       command += [new_file, output_file]
 
       is_success = system_exec *command
@@ -20,7 +20,7 @@ module XDelta3
     def self.apply_patch(old_file, patch_file, output_file)
       command = @@base_command
       command += ['-d']
-      command += ['-s', old_file] if File.file? old_file #TODO Test me
+      command += ['-s', old_file] if File.file? old_file
       command += [patch_file, output_file]
 
       is_success = system_exec *command
