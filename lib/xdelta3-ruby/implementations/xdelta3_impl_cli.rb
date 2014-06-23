@@ -1,8 +1,8 @@
 require 'open3'
 
 module XDelta3
-  module Impl
-    @@log = XDelta3.logger 
+  module XDelta3Impl
+    @@log = XDelta3.logger
 
     @@base_command = ['xdelta3', '-f'] # TODO: Add application header
 
