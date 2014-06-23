@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 # Pick whichever implementation is loaded by default
-describe XDelta3::Impl do
+describe XDelta3::XDelta3Impl do
   let!(:test_dir) { File.join(File.dirname(__FILE__), 'test_files') }
 
   before (:each) do

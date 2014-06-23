@@ -10,7 +10,7 @@ module XDelta3
     def self.create(old_file, new_file, output_file)
       @@log.debug "Generating delta patch: [#{old_file}, #{new_file}, #{output_file}]"
 
-      Impl.create_patch old_file, new_file, output_file
+      XDelta3.impl.create_patch old_file, new_file, output_file
     end
 
     # Applies patch to a file
@@ -22,7 +22,7 @@ module XDelta3
     def self.apply(old_file, patch_file, output_file)
       @@log.debug "Applying patch: [#{old_file}, #{patch_file}, #{output_file}]"
 
-      Impl.apply_patch old_file, patch_file, output_file
+      XDelta3.impl.apply_patch old_file, patch_file, output_file
     end
 
     # Computes recursive patch for two directories and creates a tgz
