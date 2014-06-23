@@ -9,13 +9,13 @@ module XDelta3
   autoload :DirPatcherImpl, 'xdelta3-ruby/implementations/dir_patcher_impl_cli.rb'
 
   def self.impl=(impl)
-    @impl = impl
+    @@impl = impl
   end
 
   def self.impl
-    @impl ||= XDelta3Impl
+    @@impl ||= XDelta3Impl
 
-    @impl
+    @@impl
   end
 
   autoload :Patch, 'xdelta3-ruby/plugins/patch.rb'
