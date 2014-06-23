@@ -24,7 +24,7 @@ module XDelta3
       raise "Could not apply patch with command \"#{command.join(' ')}\"" unless is_success
     end
 
-    def system_exec *args
+    def self.system_exec *args
       @@log.debug "[ #{args.join(', ')} ]"
 
       status = system *args
