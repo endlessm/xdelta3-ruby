@@ -4,10 +4,10 @@ module XDelta3
 
     @@base_command = ['xdelta3-dir-patcher']
 
-    def self.create_patch(old_dir, new_dir, patch_file, exec = :system_exec)
+    def self.create_patch(old_file, new_file, patch_file, exec = :system_exec)
       command = @@base_command
       command += [ 'diff' ]
-      command += [old_dir, new_dir, patch_file]
+      command += [old_file, new_file, patch_file]
 
       is_success = send(exec, *command)
 
